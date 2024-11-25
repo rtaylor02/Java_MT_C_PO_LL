@@ -21,16 +21,19 @@ Use JMeter to measure your application throughput. You do this by simulating (tr
 4. Add HTTP request in the loop with the relevant setup shown:  
    ![image](https://github.com/user-attachments/assets/fe9fe8af-42a8-400e-899b-0ad82c019170)  
    ![image](https://github.com/user-attachments/assets/92ba9a86-1dc4-44d8-a229-315187e9639d)  
-5. Add summary report that will give us the througput
-   ![image](https://github.com/user-attachments/assets/5531517b-f0cc-4e99-8a25-df5f6fe9505b)
-   Throughput with 1 thread:
-   ![image](https://github.com/user-attachments/assets/2c25e927-35ca-4524-9219-7808c8ba55bc)
+5. Add summary report that will give us the througput  
+   ![image](https://github.com/user-attachments/assets/5531517b-f0cc-4e99-8a25-df5f6fe9505b)  
+   Throughput with 1 thread:  
+   ![image](https://github.com/user-attachments/assets/2c25e927-35ca-4524-9219-7808c8ba55bc)  
    Throughput with 2 threads:  
-   ![image](https://github.com/user-attachments/assets/06c401ff-a753-4290-80ed-cb7066630512)
-7. Add view result tree for inspection of each request-response:
-   ![image](https://github.com/user-attachments/assets/1c55bd3e-34e9-42f0-82e5-8e7974db0b82)
-   Sample details of request-response:
-   ![image](https://github.com/user-attachments/assets/2de7c054-947c-47cb-9d5a-fd8dca6a0bc1)  
+   ![image](https://github.com/user-attachments/assets/06c401ff-a753-4290-80ed-cb7066630512)  
+7. Add view result tree for inspection of each request-response:  
+   ![image](https://github.com/user-attachments/assets/1c55bd3e-34e9-42f0-82e5-8e7974db0b82)  
+   Sample details of request-response:  
+   ![image](https://github.com/user-attachments/assets/2de7c054-947c-47cb-9d5a-fd8dca6a0bc1)
+
+From the metrics, we can see that at roughly the same number of cores in the machine the performance plateau:  
+![image](https://github.com/user-attachments/assets/6aa562a6-de60-4e09-b0b9-cf71372d0789)  
 
 Sample code for steps above can be seen here.
 
