@@ -8,7 +8,7 @@ Use JMeter to measure your application throughput. You do this by simulating (tr
 ## Steps
 1. Create Thread Group that will create JMeter threads to send requeasts to our HttpServer. In the sample below, we create 200 users that will send 200 requests at the same time to our HttpServer
    ![image](https://github.com/user-attachments/assets/605f1f4f-d805-435d-b93a-2e7101749a51)
-2. If you have inputs that each users can use as their parameter in their request, you can achieve this by a while loop (with the condition as shown) and input parameters (represented as csv):  
+2. If you have inputs that each users can use as their parameter in their request, you can achieve this by a while loop (with the condition as shown) with the condition specified:  
    ![while_loop](https://github.com/user-attachments/assets/e6f3b236-bc5e-4d12-a205-7aba25b98531)  
    (While loop)  
    ![Condition on while loop](https://github.com/user-attachments/assets/6cf5c46a-9bf6-494f-92ec-8a637b5cf02a)  
