@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
 
-public class rod_Main {
+public class HackersAndPolice {
     private static final int MAX_PASSWORD = 9999;
     private static Vault vault = new Vault(new Random().nextInt(MAX_PASSWORD));
 
