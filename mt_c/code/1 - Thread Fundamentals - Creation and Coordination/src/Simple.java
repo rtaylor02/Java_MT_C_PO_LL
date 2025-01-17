@@ -1,6 +1,13 @@
 public class Simple {
-    // Notice the messages from the 2 executing threads are interleaving
+    // Notice the messages from the 2 executing threads (1st_way and 2nd_way) are interleaving even after main thread finishes.
+    // 1st_way thread prints 1-10
+    // 2nd_way thread prints 101-110
+    // Play around with each thread's daemon status to see the lifecycle of that thread. NOTE: ONLY when both
+    // threads are daemon then both application will terminate as soon as main terminates. If one is daemon and
+    // the other is not, main will wait.
     public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName() + ": starting...");
+
         // 1st way: create a Runnable and pass it as constructor arg of Thread object
         byPassingARunnable();
 
@@ -9,6 +16,8 @@ public class Simple {
 
         // 3rd way: by thread pool
         byThreadPool();
+
+        System.out.println(Thread.currentThread().getName() + ": finishing...");
     }
 
     private static void byThreadPool() {
@@ -34,7 +43,7 @@ public class Simple {
         };
 
         anonymousThreadSubClass.setName("2nd_way");
-        anonymousThreadSubClass.setDaemon(false);
+        anonymousThreadSubClass.setDaemon(true);
         anonymousThreadSubClass.setPriority(Thread.MAX_PRIORITY);
         anonymousThreadSubClass.start();
     }
@@ -52,7 +61,7 @@ public class Simple {
         return () -> {
             System.out.println(Thread.currentThread().getName() + ": starting...");
             try {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 3; i++) {
                     System.out.println(i);
                     Thread.sleep(1000);
                 }
