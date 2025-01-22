@@ -49,5 +49,8 @@ Sample code for steps above can be seen here.
 
 # Java Microbenchmark Harness (JMH)
 
+# Maven - Increasing Memory for Surefire Plugin
+This can be done via pom.xml:  
+![pom_surefire_memory_config](https://github.com/user-attachments/assets/660bf77d-aab6-4c56-9ac5-4c4d49299dc8)
 
 # List of References
