@@ -51,4 +51,15 @@ is considered good.
 - Reentrant-lock = using the same lock, a thread can enter different `synchronized` sections/methods
 
 
-- 
+
+# Advanced Locking
+- [ReentrantLock](https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/concurrent/locks/ReentrantLock.html):
+  - just like `sychronized(lockObject) {...}` but with `lock()`-`unlock()` and control on fairness - `ReentrantLock(true)`. Also, with useful methods:
+    - `getQueuedThreads()`
+    - `getOwner()`
+    - `isHeldByCurrentThread()`
+    - `isLocked()`
+  - when not careful, possible *deadlock* issue. To prevent:
+    - ALWAYS put it within `try-finally` block ==> so lock is ALWAYS released in the event of exception or mishap of forgetting
+    - use of `lockInterruptibly()` or `tryLock(long, TimeUnit)` ==> so application is never gone into deadlock, or not blocked at all
+  
