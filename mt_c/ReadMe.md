@@ -11,6 +11,9 @@ is considered good.
 
 # Pointers
 ## 1 - Thread Fundamentals - Creation and Coordination
+- Motivation for multi-threading application:
+  - responsiveness
+  - performance
 
 ## 2 - Performance Optimisation - Latency and Throughput
 - Throughput = #transaction / unit time
@@ -34,10 +37,15 @@ is considered good.
 - Atomic operation ==> single step - ***'ALL or NOTHING'***
 
 ## 4 - Concurrency Challenges and Solutions
-  | Challenges                    | Solution                                                                                                                                                                                                                                                                        |
-  |-------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-  | Shared-variable inconsistency | Every shared variable should be:<br/>- Guarded by a `synchronized` block or a lock<br/>- `volatile` ==> guaranteed order (or *happens-before*) ==> sequence of flanking statements of a `volatile` variable are guaranteed (i.e. excluded from re-ordering by JIT optimisation) |
-  | Deadlock                      | ALWAYS use locks with the **same order** ==> avoid ***circular lock chain***                                                                                                                                                                                                    |
+  | Challenges                                                                                              | Solution                                                                                                                                                                                                                                                                        |
+  |---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | Shared-resource inconsistency (Racing Condition & Data Race) - at least 1 thread modifying the resource | Every shared variable should be:<br/>- Guarded by a `synchronized` block or a lock<br/>- `volatile` ==> guaranteed order (or *happens-before*) ==> sequence of flanking statements of a `volatile` variable are guaranteed (i.e. excluded from re-ordering by JIT optimisation) |
+  | Deadlock                                                                                                | ALWAYS use locks with the **same order** ==> avoid ***circular lock chain***                                                                                                                                                                                                    |
+
+
+- Racing condition and data race:
+  - Racing condition: due to non-atomic operation, e.g. value++
+  - Data race: due to CPU optimisation, e.g. re-ordering instructions, for optimised HW utilisation
 
 
 - Critical section of the code = code block that can lead to data race or racing condition
@@ -62,4 +70,13 @@ is considered good.
   - when not careful, possible *deadlock* issue. To prevent:
     - ALWAYS put it within `try-finally` block ==> so lock is ALWAYS released in the event of exception or mishap of forgetting
     - use of `lockInterruptibly()` or `tryLock(long, TimeUnit)` ==> so application is never gone into deadlock, or not blocked at all
-  
+   
+ 
+- [ReentrantReadWriteLock](https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/util/concurrent/locks/ReentrantReadWriteLock.html):
+  - Just like ReentrantLock but with `readLock()` and `writeLock()` as `Lock` objects to specify reading and writing operations respectively
+  - Read section protected by read-lock can be entered by multiple threads but only 1 thread can enter writing section protected by write-lock. Mutual exclusivity between locks are maintained:
+    - No threads can enter read-locked section when write-lock is acquired
+    - No threads can enter write-locked section when read-lock is acquired
+  - Use it for better performance when reading operation is predominant and short. ***NOTE***: better performance is not guaranteed. Always measure and validate 
+  - 
+   
