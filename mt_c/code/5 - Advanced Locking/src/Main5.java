@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Main {
+public class Main5 {
     public static void main(String[] args) {
         final int TOTAL_ITEMS = 100_000;
         final int HIGHEST_PRICE = 1000;
@@ -112,11 +112,20 @@ public class Main {
             readLock.lock();
             //lock.lock();
             try {
-                SortedMap<Integer, Integer> map = priceToCountMap.subMap(lowerPrice, higherPrice);
+                Integer fromKey = priceToCountMap.ceilingKey(lowerPrice);
+                Integer toKey = priceToCountMap.floorKey(higherPrice);
+                if (fromKey == null || toKey == null) {
+                    return 0;
+                }
+
+                NavigableMap<Integer, Integer> itemsInPriceRange = priceToCountMap.subMap(fromKey, true, toKey, true);
+
+                //SortedMap<Integer, Integer> itemsInPriceRange = priceToCountMap.subMap(lowerPrice, higherPrice);
+                //NavigableMap<Integer, Integer> itemsInPriceRange = priceToCountMap.subMap(lowerPrice, true, higherPrice, true);
 
                 int sum = 0;
-                for (Integer i : map.keySet()) {
-                    sum += map.get(i);
+                for (Integer i : itemsInPriceRange.keySet()) {
+                    sum += itemsInPriceRange.get(i);
                 }
 
                 return sum;
@@ -130,10 +139,10 @@ public class Main {
         private void initialiseInventory(int totalItems, int highestPrice) {
             Random random = new Random();
             for (int i = 0; i < totalItems; i++) {
-                int price = random.nextInt(highestPrice);
-                if (price > 0 && price < highestPrice) {
-                    addItem(price);
-                }
+                //int price = random.nextInt(highestPrice);
+                //if (price > 0 && price < highestPrice) {
+                    addItem(random.nextInt(highestPrice));
+                //}
             }
         }
 
@@ -142,10 +151,11 @@ public class Main {
             writeLock.lock();
             //lock.lock();
             try {
-                if (priceToCountMap.get(key) == null) {
+                Integer numberOfItemForPrice = priceToCountMap.get(key);
+                if (numberOfItemForPrice == null) {
                     priceToCountMap.put(key, 1);
                 } else {
-                    priceToCountMap.put(key, (priceToCountMap.get(key) + 1));
+                    priceToCountMap.put(key, (numberOfItemForPrice + 1));
                 }
             } finally {
                 writeLock.unlock();
@@ -158,8 +168,14 @@ public class Main {
             writeLock.lock();
             //lock.lock();
             try {
-                if (priceToCountMap.containsKey(key) && (priceToCountMap.get(key) > 0)) {
-                    priceToCountMap.put(key, (priceToCountMap.get(key) - 1));
+                //if (priceToCountMap.containsKey(key) && (priceToCountMap.get(key) > 0)) {
+                //    priceToCountMap.put(key, (priceToCountMap.get(key) - 1));
+                //}
+                Integer numberOfItemsForPrice = priceToCountMap.get(key);
+                if (numberOfItemsForPrice == null || numberOfItemsForPrice == 1) {
+                    priceToCountMap.remove(key);
+                } else {
+                    priceToCountMap.put(key, numberOfItemsForPrice - 1);
                 }
             } finally {
                 writeLock.unlock();
