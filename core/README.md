@@ -80,8 +80,7 @@ public class Main {
 ***NOTE***: `$` is a short form of `...\rod_jar_test $` for current directory
 1. Copy and paste the lib jar(s) to *lib* folder
 2. Compile our project: `$ javac -d target -cp lib\blablalib.jar src\com\rtaylor02\Main.java` ==> this create *Main.class* in *target* folder
-2. Execute our project: `$ java -cp "target;lib\blablalib.jar" com.rtaylor02.Main`.
-    > Double quotes `"` in *-cp* can also be single quotes `'`
+3. Execute our project: `$ java -cp "target;lib\blablalib.jar" com.rtaylor02.Main`
 
 Result:
 ```
@@ -122,9 +121,9 @@ public class Main {
 #### Steps
 ***NOTE***: `$` is a short form of `...\rod_jar_test $` for current directory
 1. Copy and paste the lib jar(s) to *lib* folder
-2. Compile our project: `$ javac -d target -cp 'lib\math1.jar;lib\math2.jar' src\com\rtaylor02\Main.java` ==> this create *Main.class* in *target* folder
-2. Execute our project: `$ java -cp 'lib\math1.jar;lib\math2.jar;target' com.rtaylor02.Main`.
-   > Double quotes `"` in *-cp* can also be single quotes `'`
+2. Compile our project: `$ javac -d target -cp "lib\*" src\com\rtaylor02\Main.java` ==> this create *Main.class* in *target* folder.
+   > NOTE: for `classpath`, you can specify individual jars, or use wildcard *. DO NOT use *.jar!
+4. Execute our project: `$ java -cp "lib\*;target" com.rtaylor02.Main`.
 
 Result:
 ```
@@ -133,3 +132,6 @@ subtract(2, 1) = 1
 divide(6, 2) = 3
 multiply(2, 2) = 4
 ```
+![image](https://github.com/user-attachments/assets/1eb3e2be-0090-451c-9cb4-1eb76b983cd7)
+
+
