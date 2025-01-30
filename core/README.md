@@ -123,7 +123,7 @@ public class Main {
 1. Copy and paste the lib jar(s) to *lib* folder
 2. Compile our project: `$ javac -d target -cp "lib\*" src\com\rtaylor02\Main.java` ==> this create *Main.class* in *target* folder.
    > NOTE: for `classpath`, you can specify individual jars, or use wildcard *. DO NOT use *.jar!
-4. Execute our project: `$ java -cp "lib\*;target" com.rtaylor02.Main`.
+3. Execute our project: `$ java -cp "lib\*;target" com.rtaylor02.Main`.
 
 Result:
 ```

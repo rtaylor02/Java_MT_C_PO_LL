@@ -1,7 +1,7 @@
 /*
 This code demonstrate racing condition solution using synchronized sections with a lock object (rather than itself)
  */
-public class Main3_Solution3_Syncd_Lock_Objects {
+public class Main3_Solution3_Syncd_Lock_Object {
     public static void main(String[] args) throws InterruptedException {
         Inventory inventory = new Inventory();
 

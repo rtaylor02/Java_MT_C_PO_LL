@@ -34,23 +34,17 @@ public class Main3_Problem {
         decrementingThread.join();
 
         System.out.println(String.format("inventory.data = %d", inventory.data));
-        //System.out.println(String.format("inventory.data = %d", inventory.data.intValue()));
     }
 
     private static class Inventory {
-        //private AtomicInteger data = new AtomicInteger(0);
         private int data = 0;
 
         public void increment() {
-        //public synchronized void increment() {
             data++;
-            //data.incrementAndGet();
         }
 
         public void decrement() {
-        //public synchronized void decrement() {
             data--;
-            //data.decrementAndGet();
         }
     }
 }

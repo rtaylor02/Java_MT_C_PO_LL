@@ -1,4 +1,9 @@
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /*
@@ -9,10 +14,29 @@ import java.util.concurrent.TimeUnit;
 public class ThreadCoordination {
     public static void main(String[] args) {
         // Using interrupt to coordinate a thread
-        ByInterrupt.main();
+        //ByInterrupt.main();
 
         // Using join to coordinate threads
         //ByJoin.main();
+
+        // Using Object's wait() and notify()/notifyAll()
+        ByWaitAndNotify.main();
+    }
+
+    private static Runnable getRunnable(final long sleepTime) {
+        Runnable task = () -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    System.out.println(String.format("%s: %d", Thread.currentThread().getName(), i));
+                    TimeUnit.MILLISECONDS.sleep(sleepTime);
+                }
+            } catch (InterruptedException ie) {
+                System.out.println(String.format("%s is interrupted!", Thread.currentThread().getName()));
+                System.out.println(String.format("%s is having graceful termination...", Thread.currentThread().getName()));
+            }
+            System.out.println(String.format("%s: finished", Thread.currentThread().getName()));
+        };
+        return task;
     }
 
     // Using interrupt to coordinate a thread
@@ -26,25 +50,22 @@ public class ThreadCoordination {
         }
 
         private static void byManualDetection() {
-            Runnable task = new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println(String.format("%s: getting inside infinite loop...", Thread.currentThread().getName()));
-                    while (true) {
-                        if (Thread.currentThread().isInterrupted()) {
-                            System.out.println(String.format("%s: interruption detected", Thread.currentThread().getName()));
-                            break;
-                        }
+            Runnable task = () -> {
+                System.out.format("%s: getting inside infinite loop...%n", Thread.currentThread().getName());
+                while (true) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        System.out.format("%s: interruption detected%n", Thread.currentThread().getName());
+                        break;
                     }
-                    System.out.println(String.format("%s: broke out of infinite loop for graceful escape", Thread.currentThread().getName()));
                 }
+                System.out.printf("%s: broke out of infinite loop for graceful escape%n%n", Thread.currentThread().getName());
             };
 
             Thread t1 = Thread.ofPlatform().name("T1").start(task);
             Thread t2 = Thread.ofPlatform().name("T2").start(task);
 
             t1.interrupt(); // NOTE: t2 is still running
-            System.out.println(String.format("%s: ending.. NOTE: t2 is still running", Thread.currentThread().getName()));
+            System.out.format("%s: ending.. NOTE: t2 is still running%n", Thread.currentThread().getName());
         }
 
         private static void byCatchingIE() {
@@ -81,7 +102,7 @@ public class ThreadCoordination {
             Thread t2 = Thread.ofPlatform().name("T2").start(getRunnable(500));
 
             try {
-                System.out.println(String.format("%s: waiting for all threads", Thread.currentThread().getName()));
+                System.out.printf("%s: waiting for all threads%n", Thread.currentThread().getName());
                 t1.join();
                 t2.join();
                 System.out.println(String.format("%s: finally!", Thread.currentThread().getName()));
@@ -91,22 +112,10 @@ public class ThreadCoordination {
         }
     }
 
-    private static Runnable getRunnable(final long sleepTime) {
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    for (int i = 0; i < 10; i++) {
-                        System.out.println(String.format("%s: %d", Thread.currentThread().getName(), i));
-                        Thread.sleep(sleepTime);
-                    }
-                } catch (InterruptedException ie) {
-                    System.out.println(String.format("%s is interrupted!", Thread.currentThread().getName()));
-                    System.out.println(String.format("%s is having graceful termination...", Thread.currentThread().getName()));
-                }
-                System.out.println(String.format("%s: finished", Thread.currentThread().getName()));
-            }
-        };
-        return task;
+    private static class ByWaitAndNotify {
+        public static void main(String... args) {
+
+
+        }
     }
 }

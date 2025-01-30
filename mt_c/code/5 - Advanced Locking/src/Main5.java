@@ -97,12 +97,11 @@ public class Main5 {
     }
 
     public static class InventoryDatabase {
-
         TreeMap<Integer, Integer> priceToCountMap = new TreeMap<>();
         public ReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
         public Lock readLock = reentrantReadWriteLock.readLock();
         public Lock writeLock = reentrantReadWriteLock.writeLock();
-        public Lock lock = new ReentrantLock();
+        public Lock lock = new ReentrantLock(); // Worse performance
 
         private InventoryDatabase(int totalItems, int highestPrice) {
             initialiseInventory(totalItems, highestPrice);

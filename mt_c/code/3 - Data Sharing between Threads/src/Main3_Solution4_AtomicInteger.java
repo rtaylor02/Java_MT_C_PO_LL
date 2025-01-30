@@ -8,21 +8,15 @@ public class Main3_Solution4_AtomicInteger {
     public static void main(String[] args) throws InterruptedException {
         Inventory inventory = new Inventory();
 
-        Thread incrementingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 1000; i++) {
-                    inventory.increment();
-                }
+        Thread incrementingThread = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                inventory.increment();
             }
         });
 
-        Thread decrementingThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 1000; i++) {
-                    inventory.decrement();
-                }
+        Thread decrementingThread = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                inventory.decrement();
             }
         });
 

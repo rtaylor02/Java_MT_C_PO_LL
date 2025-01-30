@@ -13,7 +13,16 @@ is considered good.
 ## 1 - Thread Fundamentals - Creation and Coordination
 - Motivation for multi-threading application:
   - responsiveness
-  - performance
+  - performance  
+
+
+- Forms of thread coordination:
+  - interrupt: 
+    - `thread.interrupt()`
+    - `thread.isInterrupted()`
+  - waiting:
+    - `thread.join([long[, int]])`
+    - `object.wait([long[, int]])` & `object.notify()` / `object.notifyAll()`
 
 ## 2 - Performance Optimisation - Latency and Throughput
 - Throughput = #transaction / unit time
@@ -49,6 +58,11 @@ is considered good.
 
 
 - Critical section of the code = code block that can lead to data race or racing condition
+
+
+- Atomic operation = an operation done within 1 CPU clock.
+  - Primitive (except `long` and `double`) read & write ==> use `volatile` to guarantee atomic `long` & `double` R/W ops.
+  - Reference read & write
 
 
 - Locking:

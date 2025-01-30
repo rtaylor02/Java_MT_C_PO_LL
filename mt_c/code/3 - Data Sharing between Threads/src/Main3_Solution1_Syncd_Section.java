@@ -37,7 +37,6 @@ public class Main3_Solution1_Syncd_Section {
 
         public synchronized void increment() {
             data++;
-            //data.incrementAndGet();
         }
 
         public synchronized void decrement() {

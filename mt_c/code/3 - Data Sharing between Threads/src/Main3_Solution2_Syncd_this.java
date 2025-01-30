@@ -1,7 +1,7 @@
 /*
 This code demonstrate racing condition solution using synchronized section on object (this).
  */
-public class Main3_Solution2_Syncd_Object {
+public class Main3_Solution2_Syncd_this {
     public static void main(String[] args) throws InterruptedException {
         Inventory inventory = new Inventory();
 
