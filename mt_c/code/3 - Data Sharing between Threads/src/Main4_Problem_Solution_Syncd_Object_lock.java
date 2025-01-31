@@ -13,7 +13,7 @@ public class Main4_Problem_Solution_Syncd_Object_lock {
             executorService.submit(getDriver(lock, isGreenLight));
             executorService.submit(getGreenLight(lock, isGreenLight));
 
-            executorService.awaitTermination(8000, TimeUnit.MILLISECONDS);
+            executorService.awaitTermination(0, TimeUnit.MILLISECONDS);
 
         } catch (InterruptedException e) {
         }
@@ -33,8 +33,10 @@ public class Main4_Problem_Solution_Syncd_Object_lock {
                     System.out.printf("%s: GREEN!!%n", Thread.currentThread().getName());
 
                     lock.notify(); // Free waiting thread with the same Object lock
-                } catch (InterruptedException e) {
+                    while (true) {
 
+                    }
+                } catch (InterruptedException e) {
                 }
             }
         };
@@ -52,7 +54,6 @@ public class Main4_Problem_Solution_Syncd_Object_lock {
                         System.out.printf("%s: waiting for green light...%n", Thread.currentThread().getName());
                         lock.wait(); // Wait to be notified
                     } catch (InterruptedException e) {
-
                     }
                 }
             }

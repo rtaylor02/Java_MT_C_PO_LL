@@ -22,7 +22,7 @@ is considered good.
     - `thread.isInterrupted()`
   - waiting:
     - `thread.join([long[, int]])`
-    - `object.wait([long[, int]])` & `object.notify()` / `object.notifyAll()`
+    - `object.wait([long[, int]])` & `object.notify()` / `object.notifyAll()` ==> see section 3 & 4 for this as this is more for sharing data between threads.
 
 ## 2 - Performance Optimisation - Latency and Throughput
 - Throughput = #transaction / unit time
@@ -71,6 +71,39 @@ is considered good.
 
 
 - Reentrant-lock = using the same lock, a thread can enter different `synchronized` sections/methods
+
+
+- Lock is just an object replacement for `synchronized(this)` or `synchronized` method:
+  ```
+  public void increment() {
+      synchronized (this) {
+          data++;
+      }
+  }
+  ```  
+  is equivalent to:
+  ```
+  public synchronized void increment() {
+      data++;
+  }
+  ```
+  is equivalent to:
+  ```
+  private Object lock = new Object();
+  public void increment() {
+      synchronized (lock) {
+          data++;
+      }
+  }
+  ```
+  > There can be ***ONE*** thread executing any `synchronized` statement/method at any point.   
+  > Thus, it is analogous to 1 public toilet with 1 key(monitor).. :) 
+
+  > An owner of a monitor = a *runnable-state* thread that is currently executing any `synchronized` statement/method.
+
+  > `wait()` & `notify()` / `notifyAll()`: ONLY invoked by the owner of the monitor. 
+  > 
+  > `wait()` relinquishes the monitor at the point of execution, but `notify()` / `notifyAll()` relinquishes the monitor at the end of `synchronized` statement/method. 
 
 
 

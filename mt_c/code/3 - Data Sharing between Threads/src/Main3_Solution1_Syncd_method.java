@@ -1,7 +1,7 @@
 /*
-This code demonstrate racing condition solution using synchronized section on object (this).
+This code demonstrate solution 1 to a racing condition using synchronized sections
  */
-public class Main3_Solution2_Syncd_this {
+public class Main3_Solution1_Syncd_method {
     public static void main(String[] args) throws InterruptedException {
         Inventory inventory = new Inventory();
 
@@ -35,18 +35,12 @@ public class Main3_Solution2_Syncd_this {
     private static class Inventory {
         private int data = 0;
 
-        public void increment() {
-            // Protect critical section using this object
-            synchronized (this) {
-                data++;
-            }
+        public synchronized void increment() {
+            data++;
         }
 
-        public void decrement() {
-            // Protect critical section using this object
-            synchronized (this) {
-                data--;
-            }
+        public synchronized void decrement() {
+            data--;
         }
     }
 }
