@@ -1,10 +1,5 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
 2 ways to coordinate threads:
@@ -20,7 +15,7 @@ public class ThreadCoordination {
         //ByJoin.main();
 
         // Using Object's wait() and notify()/notifyAll()
-        ByWaitAndNotify.main();
+        ByOnSpinWait.main();
     }
 
     private static Runnable getRunnable(final long sleepTime) {
@@ -112,10 +107,57 @@ public class ThreadCoordination {
         }
     }
 
-    private static class ByWaitAndNotify {
+    private static class ByOnSpinWait {
         public static void main(String... args) {
+            AtomicInteger sharedTicker = new AtomicInteger(5);
 
+            Counter counter = new Counter(sharedTicker);
+            SprinterAtCount3 sprinter = new SprinterAtCount3(sharedTicker);
 
+            counter.start();
+            sprinter.start();
+        }
+
+        private static class Counter extends Thread {
+            AtomicInteger ticker;
+
+            private Counter(AtomicInteger ticker) {
+                this.ticker = ticker;
+            }
+
+            @Override
+            public void run() {
+                Thread.currentThread().setName("Counter");
+
+                try {
+                    for (;ticker.get() > 0;) {
+                        System.out.printf("%s: %d%n", Thread.currentThread().getName(), ticker.get());
+                        Thread.sleep(1000);
+                        ticker.getAndDecrement();
+                    }
+                } catch (InterruptedException ie) {
+
+                }
+            }
+        }
+
+        private static class SprinterAtCount3 extends Thread {
+            AtomicInteger ticker;
+
+            public SprinterAtCount3(AtomicInteger ticker) {
+                this.ticker = ticker;
+            }
+
+            @Override
+            public void run() {
+                Thread.currentThread().setName("Sprinter");
+
+                // ALWAYS put onSpinWait() in a while(<flag>) loop
+                while (ticker.get() != 3) {
+                    onSpinWait();
+                }
+                System.out.printf("%s: WHOOSHH!!%n", Thread.currentThread().getName());
+            }
         }
     }
 }

@@ -22,7 +22,8 @@ is considered good.
     - `thread.isInterrupted()`
   - waiting:
     - `thread.join([long[, int]])`
-    - `object.wait([long[, int]])` & `object.notify()` / `object.notifyAll()` ==> see section 3 & 4 for this as this is more for sharing data between threads.
+    - `object.wait([long[, int]])` & `object.notify()` / `object.notifyAll()` ==> `synchronized` needed. see section 3 & 4 for this as this is more for sharing data between threads.
+      - `thread.onSpinWait()`==> no `synchronized` needed as thread, unlike `wait()` does not go into WAIT state. ALWAYS enclose this method in `while(<flag>)` loop.
 
 ## 2 - Performance Optimisation - Latency and Throughput
 - Throughput = #transaction / unit time
@@ -73,7 +74,9 @@ is considered good.
 - Reentrant-lock = using the same lock, a thread can enter different `synchronized` sections/methods
 
 
-- Lock is just an object replacement for `synchronized(this)` or `synchronized` method:
+- Lock is just an object replacement for `synchronized(this)` statement or `synchronized` method with the objectives of:
+  1. More flexibility
+  2. More control
   ```
   public void increment() {
       synchronized (this) {
