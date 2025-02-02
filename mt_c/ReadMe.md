@@ -128,5 +128,11 @@ is considered good.
     - No threads can enter read-locked section when write-lock is acquired
     - No threads can enter write-locked section when read-lock is acquired
   - Use it for better performance when reading operation is predominant and short. ***NOTE***: better performance is not guaranteed. Always measure and validate 
-  - 
+
+
+# Inter-Thread Communication
+- 3 ways to do inter-thread communication:
+  - Semaphore
+  - Condition
+  - Object's wait() - notify()/notifyAll()
    
