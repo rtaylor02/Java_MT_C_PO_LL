@@ -53,9 +53,12 @@ is considered good.
   | Deadlock                                                                                                | ALWAYS use locks with the **same order** ==> avoid ***circular lock chain***                                                                                                                                                                                                    |
 
 
-- Racing condition and data race:
-  - Racing condition: due to non-atomic operation, e.g. value++
-  - Data race: due to CPU optimisation, e.g. re-ordering instructions, for optimised HW utilisation
+- Race condition and data race:
+  - Race condition: due to non-atomic operation (e.g. x++) in the logic and leads to incorrect behaviour. Solution: synchronized critical section
+  - Data race: due to compiler and CPU instruction re-ordering for optimised HW utilisation and performance. Solution: 'volatile' shared variables. Use of 'synchronized' in data race is rarely needed and can affect performance.
+
+
+- `volatile` ==> keeping the order of statements: all instructions before, stay before; all instructions after, stay after. 
 
 
 - Critical section of the code = code block that can lead to data race or racing condition
