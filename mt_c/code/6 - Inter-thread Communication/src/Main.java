@@ -1,23 +1,28 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
     public static void main(String[] args) {
-        Inter_Thread_Comms_With_Semaphore.main();
+        //Inter_Thread_Comms_With_Semaphore.main();
+
         Inter_Thread_Comms_With_Condition.main();
-        Inter_Thread_Comms_With_Object.main();
+
+        //Inter_Thread_Comms_With_Object.main();
     }
 
     private static class Inter_Thread_Comms_With_Semaphore {
         public static void main(String... args) {
-            SimpleProducerConsumer.main();
+            // Sample of using Semaphore to create sequence of task executions among threads
+            //SimpleProducerConsumer.main();
 
-
+            // Sample of using Semaphore to coordinate tasks completion among threads
+            SemaphoreAsBarrier.main();
         }
 
         private static class SimpleProducerConsumer {
@@ -34,7 +39,7 @@ public class Main {
             }
 
             private static class Producer extends Thread {
-                private String[] message = {"Hello", "this", "is", "cool"};
+                private final String[] message = {"Hello", "this", "is", "cool"};
 
                 @Override
                 public void run() {
@@ -43,7 +48,8 @@ public class Main {
                         for (String s : message) {
                             queue.offer(s);
                         }
-                        fullSemaphore.release();
+                        System.out.printf("%s: finished loading messages...%n", Thread.currentThread().getName());
+                        fullSemaphore.release(); // Allow consumer to take messages
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -51,7 +57,6 @@ public class Main {
             }
 
             private static class Consumer extends Thread {
-
                 @Override
                 public void run() {
                     try {
@@ -71,7 +76,7 @@ public class Main {
         private static class SemaphoreAsBarrier {
             public static final int TOTAL_WORKERS = 4;
 
-            public static void main(String[] args) {
+            public static void main(String... args) {
                 List<Thread> threads = new ArrayList<>();
                 Task sharedTask = new Task();
                 threads.add(new Thread(sharedTask));
@@ -139,8 +144,87 @@ public class Main {
     }
 
     private static class Inter_Thread_Comms_With_Condition {
-        public static void main(String... args) {
+        private static Database db;
 
+        private record Database(String name, String idNo) { }
+
+        public static void main(String... args) {
+            final Lock lock = new ReentrantLock();
+            final Condition detailsFilled = lock.newCondition();
+
+            UserInputHandler userInputHandler = new UserInputHandler(lock, detailsFilled);
+            DatabaseProcessor databaseProcessor = new DatabaseProcessor(lock, detailsFilled);
+
+            ExecutorService service = Executors.newFixedThreadPool(2);
+            service.submit(userInputHandler);
+            service.submit(databaseProcessor);
+
+            try {
+                service.awaitTermination(10000, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static class UserInputHandler implements Runnable {
+            private final Lock lock;
+            private final Condition condition;
+
+            public UserInputHandler(final Lock lock, final Condition condition) {
+                this.lock = lock;
+                this.condition = condition;
+            }
+
+            @Override
+            public void run() {
+                try {
+                    lock.lock();
+
+                    System.out.printf("Hello, this is %s processing your data...%n", Thread.currentThread().getName());
+                    System.out.print("Enter name: ");
+                    Scanner input = new Scanner(System.in);
+                    String name = input.nextLine();
+
+                    System.out.print("Enter id number: ");
+                    String idNo = input.nextLine();
+
+                    db = new Database(name, idNo);
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+
+        private static class DatabaseProcessor implements Runnable {
+            private final Lock lock;
+            private final Condition condition;
+
+            public DatabaseProcessor(final Lock lock, final Condition condition) {
+                this.lock = lock;
+                this.condition = condition;
+            }
+
+            @Override
+            public void run() {
+                try {
+                    lock.lock();
+                    while (db.idNo().equals(null) || db.name().equals(null)) {
+                        try {
+                            condition.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    displayData(db);
+                } finally {
+                    lock.unlock();
+                }
+            }
+
+            private void displayData(Database database) {
+                System.out.printf("%s: reading - name = %s, idNo = %s%n", Thread.currentThread().getName(), db.name(), db.idNo());
+            }
         }
     }
 
