@@ -1,7 +1,6 @@
-package po_ll.JMC_codes.cameron_mckenzie;
-
-
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 public class HotJavaMethodRunner implements Runnable {
     private static final int NUMBER_OF_THREADS = 8;
@@ -24,10 +23,10 @@ public class HotJavaMethodRunner implements Runnable {
     public void run() {
         WorkEvent event = new WorkEvent();
         event.begin();
-        Collection<Integer> firstBunch = new LinkedList<>();
-        Collection<Integer> secondBunch = new LinkedList<>();
-        // Collection<Integer> firstBunch = new HashSet<>();
-        // Collection<Integer> secondBunch = new HashSet<>();
+        //Collection<Integer> firstBunch = new LinkedList<>();
+        //Collection<Integer> secondBunch = new LinkedList<>();
+         Collection<Integer> firstBunch = new HashSet<>();
+         Collection<Integer> secondBunch = new HashSet<>();
 
         initialise(firstBunch, 3);
         initialise(secondBunch, 2);

@@ -1,6 +1,6 @@
-package po_ll.JMC_codes.cameron_mckenzie;
-
-import jdk.jfr.*;
+import jdk.jfr.Category;
+import jdk.jfr.Description;
+import jdk.jfr.Label;
 
 /**
  * This is a JDK Flight Recorder event
