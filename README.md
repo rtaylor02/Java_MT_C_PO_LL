@@ -1,5 +1,5 @@
 # Java_MT_C_PO_LL
-MT_C_PO = Multi-Threading, Concurrency, Performance Optimisation, and Low Latency
+MT_C_PO = Multi-Threading, Concurrency, Performance Optimisation, and Low Latencies
 
 ## Introduction
 This is a one-stop point for multi-threading, concurrency, performance optimisation and low-latency materials in Java.
