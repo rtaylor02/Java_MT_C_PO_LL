@@ -6,11 +6,15 @@ public class HotJavaMethodRunner implements Runnable {
     private static final int NUMBER_OF_THREADS = 8;
 
     public static void main(String[] args) throws Exception{
+        System.out.println("Press enter to start");
+        System.out.flush();
+        System.in.read();
+
         ThreadGroup threadGroup = new ThreadGroup("Workers");
         Thread[] threads = new Thread[NUMBER_OF_THREADS];
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(threadGroup, new HotJavaMethodRunner(), "Worker thread " + i);
-            threads[i].setDaemon(true);
+            threads[i].setDaemon(true); // main thread will not wait for this thread
             threads[i].start();
         }
 
@@ -21,21 +25,23 @@ public class HotJavaMethodRunner implements Runnable {
 
     @Override
     public void run() {
-        WorkEvent event = new WorkEvent();
-        event.begin();
-        //Collection<Integer> firstBunch = new LinkedList<>();
-        //Collection<Integer> secondBunch = new LinkedList<>();
-         Collection<Integer> firstBunch = new HashSet<>();
-         Collection<Integer> secondBunch = new HashSet<>();
+        while (true) {
+            WorkEvent event = new WorkEvent();
+            event.begin();
+            //Collection<Integer> firstBunch = new LinkedList<>();
+            //Collection<Integer> secondBunch = new LinkedList<>();
+            Collection<Integer> firstBunch = new HashSet<>();
+            Collection<Integer> secondBunch = new HashSet<>();
 
-        initialise(firstBunch, 3);
-        initialise(secondBunch, 2);
-        int intersectionSize = countMatches(firstBunch, secondBunch);
+            initialise(firstBunch, 3);
+            initialise(secondBunch, 2);
+            int intersectionSize = countMatches(firstBunch, secondBunch);
 
-        event.setIntersectionSize(intersectionSize);
-        event.end();
-        event.commit();
-        Thread.yield();
+            event.setIntersectionSize(intersectionSize);
+            event.end();
+            event.commit();
+            Thread.yield();
+        }
     }
 
     public void initialise(Collection<Integer> collection, int modulus) {
