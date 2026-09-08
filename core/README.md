@@ -190,4 +190,69 @@ public class Main {
    ![Final result](img/fat_jar_final_result.png)  
 
 
+### Example 6 - Create a distributable & executable ***slim*** jar consisting all 3rd party libraries and your own jar containing main class
+Example:  
+We have a project called rod_slim_jar structure below. The 3rd party jars are stored in *lib* folder.  
+![structure before compilation](img/slim_jar_pre_compilation.png)  
+
+Code:
+```
+package com.rtaylor02;
+
+import com.math1.Adder;
+import com.math1.Subtractor;
+import com.math2.Divider;
+import com.math2.Multiplier; 
+
+public class Main {
+    public static void main(String[] args) {
+        Adder adder = new Adder();
+        System.out.println("add(1, 2) = " + adder.add(1, 2));
+
+        Subtractor subtractor = new Subtractor();
+        System.out.println("subtract(2, 1) = " + subtractor.subtract(2, 1));
+
+        Divider divider = new Divider();
+        System.out.println("divide(6, 2) = " + divider.divide(6, 2));
+
+        Multiplier multiplier = new Multiplier();
+        System.out.println("multiply(2, 2) = " + multiplier.multiply(2, 2));
+    }
+}
+```
+
+#### Steps
+***NOTE***: `$` is a short form of `...\rod_slim_jar $` as current directory
+1. Copy and paste the lib jar(s) to *lib* folder
+2. Compile our project: `$ javac -d out -cp "lib\*" src\com\rtaylor02\Main.java` ==> this create *Main.class* in *out* folder.
+   > NOTE: for `classpath`, you can specify individual jars, or use wildcard *. DO NOT use *.jar!
+
+   ![Compilation result](img/slim_jar_post_compilation.png)
+3. Execute our project to test all is running well: `$ java -cp "lib\*;target" com.rtaylor02.Main`.
+   ![Successful run](img/slim_jar_run_test.png)
+4. Distribution steps:
+   1) Create manifest.txt at the same level as `out` folder:
+      ```text
+      Manifest-Version: 1.0
+      Main-Class: com.rtaylor02.Main
+      Class-Path: lib/math1.jar lib/math2.jar
+      ```        
+   2) Create a jar file from inside `out`:  
+      `$ jar cfm ../rod_slim.jar ../manifest.txt .`  
+      ![Create a fat jar file](img/fat_jar_create_jar.png)  
+   3) Test jar file:  
+      `$ cd ..`  
+      `$ java -jar rod_slim.jar`  
+      ![Final result](img/slim_jar_run.png)
+   4) Zip jar & lib folder:  
+      ![](img/slim_jar_zip.png)  
+   5) Test by unzipping it in different folder and run with `$ java -jar rod_slim.jar`:
+      ![](img/slim_jar_final_result.png)
+
+> NOTE: the order of arguments reflects the options being used, i.e. `$ jar cmf <arg for 'create'> <arg for 'manifest-file'> <arg for 'file(s)'>`.  
+> ![basic jar cmd](img/jar_cmd_basic.png)  
+> ![jar cmd options](img/jar_cmd_options.png)  
+
+More information on `jar` cmd: [Java Tutorial - jar](https://docs.oracle.com/javase/tutorial/deployment/jar/build.html)
+
 
