@@ -2,8 +2,8 @@ package com.rtaylor02;
 
 import com.math1.Adder;
 import com.math1.Subtractor;
-import com.other.Divider;
-import com.other.Multiplier;
+import com.math2.Divider;
+import com.math2.Multiplier;
 
 public class Main {
     public static void main(String[] args) {
