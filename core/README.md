@@ -136,7 +136,7 @@ multiply(2, 2) = 4
 
 ### Example 5 - Create a distributable & executable jar consisting all 3rd party libraries and your own jar containing main class
 Example:  
-We have a project called rod_jar_multiple_external_jars with structure below. The 3rd party jars are stored in *lib* folder.  
+We have a project called rod_fat_jar structure below. The 3rd party jars are stored in *lib* folder.  
 ![structure before compilation](img/fat_jar_pre_compilation.png)  
 
 Code:
